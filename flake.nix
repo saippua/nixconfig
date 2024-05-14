@@ -54,6 +54,24 @@
                     }
                 ];
             };
+	    tyo = nixpkgs.lib.nixosSystem {
+                inherit system pkgs;
+                specialArgs = {
+                    inherit pkgs-unstable;
+                };
+                modules = [
+                    ./machines/shared/configuration.nix
+                    ./machines/tyolappari/configuration.nix
+
+                    inputs.home-manager.nixosModules.home-manager
+                    {
+                        home-manager.useGlobalPkgs = true;
+                        home-manager.useUserPackages = true;
+                        home-manager.extraSpecialArgs = { inherit pkgs-unstable; };
+                        home-manager.users.localadmin = import ./home.nix;
+                    }
+                ];
+            };
         };
     };
 }

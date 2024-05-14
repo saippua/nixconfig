@@ -30,7 +30,7 @@
       xclip
       just
       stow
-      ripgrep
+      ripgrep # Required for nvim telescope
       pciutils
       ffmpeg
 
@@ -50,12 +50,10 @@
       discord
 
       # Compilers
-      llvmPackages_17.libcxxClang
-      nodejs
-      # gcc13
+      nodejs # Required for nvim
+      gcc13
       # nodejs
     ] ++ (with pkgs-unstable; [
-      arduino-ide
     ]);
 
     fonts.fontconfig.enable = true;
@@ -88,6 +86,56 @@
       lfs.enable = true;
     };
 
+    programs.feh = {
+        enable = true;
+        keybindings = {}; # Kbd buttons
+        buttons = {}; # Mouse buttons
+    };
+
+    programs.neovim = {
+        enable = true;
+        defaultEditor = true;
+        viAlias = true;
+        vimAlias = true;
+        withPython3 = true;
+        withNodeJs = true;
+    };
+
+    programs.zsh = {
+        enable = true;
+        oh-my-zsh = {
+            enable = true;
+            theme = "dst";
+        };
+        # enableCompletion = false;
+        # history = { ignoreAllDups = true; };
+        syntaxHighlighting.enable = true;
+    };
+
+    programs.alacritty = {
+        enable = true;
+        settings = {
+            font = {
+                size = 12.0;
+                normal = {
+                    family = "Meslo LG S DZ for Powerline";
+                    style = "Regular";
+                };
+            };
+            keyboard.bindings = [
+                # {
+                #     key = "Tab";
+                #     mods = "Control";
+                #     chars = "\u001B[1;5I"
+                # }
+                # {
+                #     key = "Tab";
+                #     mods = "Control|Shift";
+                #     chars = "\u001B[1;6I";
+                # }
+            ];
+        };
+    };
 
     home.stateVersion = "23.11";
     programs.home-manager.enable = true;
