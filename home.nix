@@ -24,6 +24,11 @@
     # Tearing fix for i3
     services.picom.enable = true;
 
+    nixpkgs.config = {
+        allowUnfree = true;
+        allowUnfreePredicate = (_: true);
+    };
+
     home.packages = with pkgs;
     [
       # Utilities
@@ -33,6 +38,7 @@
       ripgrep # Required for nvim telescope
       pciutils
       ffmpeg
+      lshw
 
       # Fonts
       powerline-fonts
@@ -47,6 +53,7 @@
       thorium
 
       # Communication
+      teams-for-linux
       discord
 
       # Compilers
@@ -65,7 +72,9 @@
             modifier = "Mod1"; # Mod1 = Alt. Mod4 = super.
             terminal = "alacritty";
             keybindings = lib.mkOptionDefault {
-                "${modifier}+tab" = "workspace next_on_output";
+                "${modifier}+Tab" = "workspace next_on_output";
+                "${modifier}+Ctrl+greater" = "move workspace to output right";
+                "${modifier}+Ctrl+less" = "move workspace to output left";
                 "Mod4+l" = "exec i3lock --color=000000";
             };
             bars = [
@@ -77,6 +86,33 @@
             ];
         };
         extraConfig = "for_window [class=\"Matplotlib\"] floating enable, resize set 900px 600px, move position center, border normal";
+    };
+
+    services.autorandr.enable = true;
+    programs.autorandr = {
+        enable = true;
+        # profiles = {
+        #     "docked" = {
+        #         # fingerprint = {
+        #         #     eDP1 = "";
+        #         #     DP2-3 = "";
+        #         # };
+        #         config = {
+        #             eDP1 = {
+        #                 enable = true;
+        #                 position = "0x860";
+        #                 mode = "1920x1080";
+        #                 rate = "60.00";
+        #             };
+        #             DP2-3 = {
+        #                 enable = true;
+        #                 position = "1920x0";
+        #                 mode = "2560x1440";
+        #                 rate = "59.95";
+        #             };
+        #         };
+        #     };
+        # };
     };
 
     programs.git = {
@@ -107,8 +143,12 @@
             enable = true;
             theme = "dst";
         };
-        # enableCompletion = false;
-        # history = { ignoreAllDups = true; };
+        initExtra = "setopt BASH_AUTO_LIST NO_MENU_COMPLETE NO_AUTO_MENU";
+        shellAliases = {
+            sourcezsh = "source ~/.zshrc";
+            nixconfig="git -C ~/nixconfig";
+            };
+        history = { ignoreDups = true; };
         syntaxHighlighting.enable = true;
     };
 

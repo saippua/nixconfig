@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ pkgs, pkgs-unstable, home-manager, ... }:
+{ config, pkgs, pkgs-unstable, home-manager, ... }:
 
 {
   imports =
@@ -29,6 +29,24 @@
     extraGroups = [ "wheel" "storage" "audio" "networkmanager" ];
   };
 
+  hardware.nvidia = {
+    # modesetting.enable = true;
+    # powerManagement.enable = false;
+    # powerManagement.finegrained = false;
+    # open = false;
+    nvidiaSettings = true;
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
+
+    prime = {
+        # sync.enable = true;
+        intelBusId = "PCI:0:2:0";
+        nvidiaBusId = "PCI:60:0:0";
+    };
+
+  };
+  services.xserver.videoDrivers = ["intel" "nvidia"];
+
+
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
@@ -40,7 +58,13 @@
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    settings = {
+      PasswordAuthentication = true;
+    };
+  };
+
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
