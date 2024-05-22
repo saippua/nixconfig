@@ -68,7 +68,9 @@
   services.openssh = {
     enable = true;
     settings = {
-      PasswordAuthentication = true;
+      # Disable password login for safety
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
     };
   };
 
