@@ -4,23 +4,6 @@
     home.username = "localadmin";
     home.homeDirectory = "/home/localadmin";
 
-    # home.packages = with pkgs; [
-    #     alacritty
-    #     just
-    #     thorium
-    # ];
-
-    # programs.i3lock = {
-    #     enable = true;
-    #     settings = {
-    #         color = "000000"; 
-    #         font-size = 24; 
-    #         indicator-idle-visible = false; 
-    #         indicator-radius = 100; 
-    #         show-failed-attempts = true;
-    #     };
-    # };
-
     # Tearing fix for i3
     services.picom.enable = true;
 
@@ -39,9 +22,23 @@
       pciutils
       ffmpeg
       lshw
+      zip unzip
+
+      # Screenshotting
+      maim 
+      xdotool
+
+      # Monitoring
+      htop
+      nload
+
+      # Audio
+      pavucontrol
 
       # Fonts
-      powerline-fonts
+      # powerline-fonts
+      zsh-powerlevel10k
+      meslo-lgs-nf
 
       # Terminals
       alacritty
@@ -51,15 +48,17 @@
 
       # Browser
       thorium
+      spotify
 
       # Communication
       teams-for-linux
+      whatsapp-for-linux
       discord
 
-      # Compilers
-      nodejs # Required for nvim
-      gcc13
-      # nodejs
+      matlab
+
+      gcc13 # Good to have a C compiler, for example for installing neovim plugins
+
     ] ++ (with pkgs-unstable; [
     ]);
 
@@ -68,51 +67,84 @@
     xsession.enable = true;
     xsession.windowManager.i3 = {
         enable = true;
-        config = rec {
+        config =
+          rec {
             modifier = "Mod1"; # Mod1 = Alt. Mod4 = super.
             terminal = "alacritty";
-            keybindings = lib.mkOptionDefault {
+            keybindings = let 
+              screenshot_file = "/home/$USER/Pictures/screenshot_$(date +'%Y-%m-%d_%H:%M:%S').png";
+            in lib.mkOptionDefault {
                 "${modifier}+Tab" = "workspace next_on_output";
-                "${modifier}+Ctrl+greater" = "move workspace to output right";
-                "${modifier}+Ctrl+less" = "move workspace to output left";
+                "${modifier}+Ctrl+Shift+Right" = "move workspace to output right";
+                "${modifier}+Ctrl+Shift+Left" = "move workspace to output left";
                 "Mod4+l" = "exec i3lock --color=000000";
+                "Ctrl+Shift+Print" = "exec --no-startup-id maim --select | xclip -selection clipboard -t image/png";
+                "Shift+Print" = "exec --no-startup-id maim --select \"${screenshot_file}\"";
+                "Ctrl+Print" = "exec --no-startup-id maim | xclip -selection clipboard -t image/png";
+                "Print" = "exec --no-startup-id maim --window $(xdotool getactivewindow) \"${screenshot_file}\"";
             };
+            focus.followMouse = false;
+            fonts = { size = 13.0; };
             bars = [
                 {
-                    "statusCommand" = "${pkgs.i3status}/bin/i3status";
-                    "command" = "i3bar";
-                    "position" = "top";
+                    statusCommand = "${pkgs.i3status}/bin/i3status";
+                    command = "i3bar";
+                    position = "top";
+                    fonts = {
+                      size = 13.0;
+                    };
                 }
             ];
+          floating = {
+            criteria = [
+              { class = "Matplotlib"; }
+              { class = "Pavucontrol"; }
+              { class = "feh"; }
+            ];
+          };
         };
-        extraConfig = "for_window [class=\"Matplotlib\"] floating enable, resize set 900px 600px, move position center, border normal";
     };
+
+
+## NOTE: Currently we should use xrandr to setup any display configurations. 
+## Example for the dock configuration at work:
+#> xrandr --output eDP1 --mode 1920x1080 --rate 60.00 --pos 0x860 --output DP2-3 --mode 2560x1440 --rate 59.95 --pos 1920x0 --primary
+##
+## Autorandr can be used to save the configurations for easier use later on.
+#> autorandr --save NAME
+#
+## To load a profile
+#> autorandr NAME
+##
+## TODO: Changes in hardware should be detected automatically and the correct profile chosen.
+## Optimally the correct profile could also be created automatically
 
     services.autorandr.enable = true;
     programs.autorandr = {
         enable = true;
-        # profiles = {
-        #     "docked" = {
-        #         # fingerprint = {
-        #         #     eDP1 = "";
-        #         #     DP2-3 = "";
-        #         # };
-        #         config = {
-        #             eDP1 = {
-        #                 enable = true;
-        #                 position = "0x860";
-        #                 mode = "1920x1080";
-        #                 rate = "60.00";
-        #             };
-        #             DP2-3 = {
-        #                 enable = true;
-        #                 position = "1920x0";
-        #                 mode = "2560x1440";
-        #                 rate = "59.95";
-        #             };
-        #         };
-        #     };
-        # };
+    };
+
+    programs.tmux = {
+      enable = true;
+      mouse = true;
+      escapeTime = 20;
+      tmuxinator.enable = true;
+      keyMode = "vi";
+      extraConfig = "
+        set-option -g detach-on-destroy off
+        set-option -g status-bg green
+        set-option -g status-fg black
+
+        bind-key -r k select-pane -U
+        bind-key -r j select-pane -D
+        bind-key -r h select-pane -L
+        bind-key -r l select-pane -R
+
+        bind-key C-h previous-window
+        bind-key C-l next-window
+
+        bind-key p last-window
+      ";
     };
 
     programs.git = {
@@ -138,18 +170,31 @@
     };
 
     programs.zsh = {
+      enable = true;
+      oh-my-zsh = {
         enable = true;
-        oh-my-zsh = {
-            enable = true;
-            theme = "dst";
-        };
-        initExtra = "setopt BASH_AUTO_LIST NO_MENU_COMPLETE NO_AUTO_MENU";
-        shellAliases = {
-            sourcezsh = "source ~/.zshrc";
-            nixconfig="git -C ~/nixconfig";
-            };
-        history = { ignoreDups = true; };
-        syntaxHighlighting.enable = true;
+        # theme = "dst";
+      };
+      plugins = [
+        {
+          name = "powerlevel10k";
+          src = pkgs.zsh-powerlevel10k;
+          file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
+        }
+      ];
+      initExtra = ''
+        setopt BASH_AUTO_LIST NO_MENU_COMPLETE NO_AUTO_MENU
+        source ~/nixconfig/config/.p10k.zsh
+      '';
+        # source ${./config/.p10k.zsh}
+      shellAliases = {
+        ll = "ls -la";
+        dev = "nix develop -c zsh";
+        sourcezsh = "source ~/.zshrc";
+        nixconfig="git -C ~/nixconfig";
+      };
+      history.ignoreDups = true;
+      syntaxHighlighting.enable = true;
     };
 
     programs.alacritty = {
@@ -158,7 +203,7 @@
             font = {
                 size = 12.0;
                 normal = {
-                    family = "Meslo LG S DZ for Powerline";
+                    family = "MesloLGS NF";
                     style = "Regular";
                 };
             };

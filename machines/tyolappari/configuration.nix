@@ -29,6 +29,13 @@
     extraGroups = [ "wheel" "storage" "audio" "networkmanager" ];
   };
 
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+  };
+  services.blueman.enable = true;
+  hardware.pulseaudio.enable = true;
+
   hardware.nvidia = {
     # modesetting.enable = true;
     # powerManagement.enable = false;
