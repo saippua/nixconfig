@@ -19,11 +19,14 @@
     LC_TELEPHONE = "fi_FI.UTF-8";
     LC_TIME = "fi_FI.UTF-8";
   };
-
   services.xserver = {
       enable = true;
       desktopManager = {
         xterm.enable = false;
+        wallpaper = {
+          combineScreens = true;
+          mode = "fill";
+        };
       };
 
       displayManager = {

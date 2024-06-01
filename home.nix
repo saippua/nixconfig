@@ -75,9 +75,23 @@
               screenshot_file = "/home/$USER/Pictures/screenshot_$(date +'%Y-%m-%d_%H:%M:%S').png";
             in lib.mkOptionDefault {
                 "${modifier}+Tab" = "workspace next_on_output";
-                "${modifier}+Ctrl+Shift+Right" = "move workspace to output right";
-                "${modifier}+Ctrl+Shift+Left" = "move workspace to output left";
-                "Mod4+l" = "exec i3lock --color=000000";
+                "${modifier}+Ctrl+Shift+Right"  = "move workspace to output right";
+                "${modifier}+Ctrl+Shift+Left"   = "move workspace to output left";
+                "${modifier}+Ctrl+Shift+Up"     = "move workspace to output up";
+                "${modifier}+Ctrl+Shift+Down"   = "move workspace to output down";
+                "${modifier}+Ctrl+Shift+l"      = "move workspace to output right";
+                "${modifier}+Ctrl+Shift+h"      = "move workspace to output left";
+                "${modifier}+Ctrl+Shift+k"      = "move workspace to output up";
+                "${modifier}+Ctrl+Shift+j"      = "move workspace to output down";
+                "${modifier}+Shift+l"           = "move right";
+                "${modifier}+Shift+h"           = "move left";
+                "${modifier}+Shift+k"           = "move up";
+                "${modifier}+Shift+j"           = "move down";
+                "${modifier}+l"           = "focus right";
+                "${modifier}+h"           = "focus left";
+                "${modifier}+k"           = "focus up";
+                "${modifier}+j"           = "focus down";
+                "Mod4+l" = "exec i3lock --color=000000 -i ${pkgs.nixos-artwork.wallpapers.mosaic-blue.gnomeFilePath}";
                 "Ctrl+Shift+Print" = "exec --no-startup-id maim --select | xclip -selection clipboard -t image/png";
                 "Shift+Print" = "exec --no-startup-id maim --select \"${screenshot_file}\"";
                 "Ctrl+Print" = "exec --no-startup-id maim | xclip -selection clipboard -t image/png";
