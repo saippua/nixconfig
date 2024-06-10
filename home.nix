@@ -1,4 +1,4 @@
-{ lib, config, pkgs, pkgs-unstable, ... }:
+{ lib, config, pkgs, system, pkgs-unstable, ... }:
 
 {
     home.username = "localadmin";
@@ -18,7 +18,6 @@
       xclip
       just
       stow
-      ripgrep # Required for nvim telescope
       pciutils
       ffmpeg
       lshw
@@ -49,6 +48,7 @@
       # Browser
       thorium
       spotify
+      zathura #PDF
 
       # Communication
       teams-for-linux
@@ -58,6 +58,11 @@
       matlab
 
       gcc13 # Good to have a C compiler, for example for installing neovim plugins
+
+      # For Neovim
+      tree-sitter # for nvim (specifically for the latex language)
+      ripgrep # Required for nvim telescope
+      cargo # For building various packages
 
     ] ++ (with pkgs-unstable; [
     ]);
@@ -169,18 +174,18 @@
     };
 
     programs.feh = {
-        enable = true;
-        keybindings = {}; # Kbd buttons
-        buttons = {}; # Mouse buttons
+      enable = true;
+      keybindings = {}; # Kbd buttons
+      buttons = {}; # Mouse buttons
     };
 
     programs.neovim = {
-        enable = true;
-        defaultEditor = true;
-        viAlias = true;
-        vimAlias = true;
-        withPython3 = true;
-        withNodeJs = true;
+      enable = true;
+      defaultEditor = true;
+      viAlias = false;
+      vimAlias = true;
+      withPython3 = true;
+      withNodeJs = true;
     };
 
     programs.zsh = {

@@ -44,14 +44,15 @@
         modules = [
           ./machines/shared/configuration.nix
           ./machines/ollenovo/configuration.nix
-          # ./machines/ollenovo/gdm.nix
-          # ./machines/ollenovo/greetd.nix
 
           inputs.home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = { inherit pkgs-unstable; };
+            home-manager.extraSpecialArgs = { 
+              inherit system;
+              inherit pkgs-unstable;
+            };
             home-manager.users.localadmin = import ./home.nix;
           }
         ];
@@ -69,7 +70,10 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = { inherit pkgs-unstable; };
+            home-manager.extraSpecialArgs = { 
+              inherit system;
+              inherit pkgs-unstable;
+            };
             home-manager.users.localadmin = import ./home.nix;
           }
         ];

@@ -15,6 +15,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "WKS-95141-NLT"; # Define your hostname.
+  networking.firewall.allowedUDPPorts = [ 10000 10001 ];
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -29,10 +30,18 @@
     extraGroups = [ "wheel" "storage" "audio" "networkmanager" ];
   };
 
+  environment.systemPackages = with pkgs; [
+  ] ++ (with pkgs-unstable; [
+    eduvpn-client
+  ]);
+  # Keyring for eduvpn client
+  services.gnome.gnome-keyring.enable = true;
+
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
   };
+
   services.blueman.enable = true;
   hardware.pulseaudio.enable = true;
 

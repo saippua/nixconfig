@@ -43,11 +43,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1716217300,
-        "narHash": "sha256-Vq6GJVkUUPcpUUvorbXpgld/elTllXioxcxPw++E3pY=",
+        "lastModified": 1717945297,
+        "narHash": "sha256-XVXgjJ/mCfjvRWYL0P6zzXHJWk6RFu4weEfsleW8gBs=",
         "owner": "doronbehar",
         "repo": "nix-matlab",
-        "rev": "dcc939ae171c9e5a039fc22d6ec759c93e8fc212",
+        "rev": "8a8b3c0e0498a6e45ee3cb17481f9cf9652e7c5c",
         "type": "gitlab"
       },
       "original": {

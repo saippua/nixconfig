@@ -54,7 +54,10 @@
 
   environment.systemPackages = with pkgs; [
   ] ++ (with pkgs-unstable; [
+    eduvpn-client
   ]);
+  # Keyring for eduvpn client
+  services.gnome.gnome-keyring.enable = true;
 
 
   # Some programs need SUID wrappers, can be configured further or are
