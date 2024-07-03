@@ -59,6 +59,7 @@
                   withVPN = false;
                   withMatlab = false;
                   isOfficial = false;
+                  font_size = 9;
                 };
               };
               home-manager.users.localadmin = import ./home.nix;
