@@ -13,71 +13,95 @@
 
   outputs = inputs @ { self, nixpkgs, nixpkgs-unstable, nix-matlab, home-manager, ... }:
 
-  let
-    system = "x86_64-linux";
-    pkgs = import nixpkgs {
-      inherit system;
-      config.allowUnfree = true;
-      config.nvidia.acceptLicense = true;
-      overlays = [
-        (final: prev: {
-          thorium = (import ./external/thorium.nix {
-            pkgs = prev; system = system;
+    let
+      system = "x86_64-linux";
+      pkgs = import nixpkgs {
+        inherit system;
+        config = {
+          allowUnfree = true;
+          allowUnfreePredicate = (_: true);
+          nvidia.acceptLicense = true;
+        };
+        overlays = [
+          (final: prev: {
+            thorium = (import ./external/thorium.nix {
+              pkgs = prev;
+              system = system;
             }).thorium;
-        })
-        nix-matlab.overlay
-      ];
-    };
-
-    pkgs-unstable = import nixpkgs-unstable {
-      inherit system;
-      config.allowUnfree = true;
-    };
-
-  in {
-    nixosConfigurations = {
-      olli = nixpkgs.lib.nixosSystem {
-        inherit system pkgs;
-        specialArgs = {
-          inherit pkgs-unstable;
-        };
-        modules = [
-          ./machines/shared/configuration.nix
-          ./machines/ollenovo/configuration.nix
-
-          inputs.home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = { 
-              inherit system;
-              inherit pkgs-unstable;
-            };
-            home-manager.users.localadmin = import ./home.nix;
-          }
+          })
+          nix-matlab.overlay
         ];
       };
-      tyo = nixpkgs.lib.nixosSystem {
-        inherit system pkgs;
-        specialArgs = {
-          inherit pkgs-unstable;
-        };
-        modules = [
-          ./machines/shared/configuration.nix
-          ./machines/tyolappari/configuration.nix
 
-          inputs.home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = { 
-              inherit system;
-              inherit pkgs-unstable;
-            };
-            home-manager.users.localadmin = import ./home.nix;
-          }
-        ];
+      unstable = import nixpkgs-unstable {
+        inherit system;
+        config = {
+          allowUnfree = true;
+          allowUnfreePredicate = (_: true);
+          nvidia.acceptLicense = true;
+        };
+      };
+
+    in
+    {
+      nixosConfigurations = {
+        olli = nixpkgs.lib.nixosSystem {
+          inherit system pkgs;
+          modules = [
+            ./machines/ollenovo/configuration.nix
+
+            inputs.home-manager.nixosModules.home-manager
+            {
+              home-manager.extraSpecialArgs = {
+                inherit system pkgs unstable;
+                opts = {
+                  withGUI = true;
+                  withVPN = false;
+                  withMatlab = false;
+                  isOfficial = false;
+                };
+              };
+              home-manager.users.localadmin = import ./home.nix;
+            }
+          ];
+        };
+        tyo = nixpkgs.lib.nixosSystem {
+          inherit system pkgs;
+          specialArgs = {
+            inherit unstable;
+          };
+          modules = [
+            ./machines/tyolappari/configuration.nix
+
+            inputs.home-manager.nixosModules.home-manager
+            {
+              home-manager.extraSpecialArgs = {
+                inherit system pkgs unstable;
+                opts = {
+                  withGUI = true;
+                  withVPN = true;
+                  withMatlab = true;
+                  isOfficial = true;
+                };
+              };
+              home-manager.users.localadmin = import ./home.nix;
+            }
+          ];
+        };
+        teho = home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          modules = [
+            (import ./home.nix {
+              inherit system pkgs unstable;
+              opts = {
+                withGUI = true;
+                withVPN = false;
+                withMatlab = false;
+                isOfficial = true;
+              };
+            })
+          ];
+        };
       };
     };
-  };
 }

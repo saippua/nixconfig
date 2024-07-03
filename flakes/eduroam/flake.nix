@@ -16,12 +16,13 @@
         packages = with pkgs; [
           python3
           (python3.withPackages (p: with p; [
+            pip
             dbus-python
           ]))
         ];
-        shellHook = ''
-          PYTHONPATH=${pkgs.python3}/${pkgs.python3.sitePackages} zsh -l
-        '';
+        # shellHook = ''
+        #   PYTHONPATH=${pkgs.python3}/${pkgs.python3.sitePackages}
+        # '';
       };
     });
 }

@@ -1,4 +1,4 @@
-{ pkgs, pkgs-unstable, home-manager, ... }:
+{ pkgs, ... }:
 {
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
@@ -19,55 +19,66 @@
     LC_TELEPHONE = "fi_FI.UTF-8";
     LC_TIME = "fi_FI.UTF-8";
   };
+
   services.xserver = {
+    enable = true;
+    desktopManager = {
+      xterm.enable = false;
+      wallpaper = {
+        combineScreens = true;
+        mode = "fill";
+      };
+    };
+
+    displayManager = {
+      defaultSession = "none+i3";
+    };
+
+    windowManager.i3 = {
       enable = true;
-      desktopManager = {
-        xterm.enable = false;
-        wallpaper = {
-          combineScreens = true;
-          mode = "fill";
-        };
-      };
+    };
+    #   extraPackages = with pkgs; [
+    #     dmenu
+    #     i3status
+    #     i3lock
+    #     i3blocks
+    #   ];
+    # };
 
-      displayManager = {
-        defaultSession = "none+i3";
-      };
+    libinput.touchpad.tapping = false;
 
-      windowManager.i3 = {
-        enable = true;
-        extraPackages = with pkgs; [
-          dmenu
-          i3status
-          i3lock
-          i3blocks
-        ];
-      };
-
-      libinput.touchpad.tapping = false;
-
-      # Configure keymap for console
-      autoRepeatInterval = 30;
-      autoRepeatDelay = 200;
-      xkb = {
-        layout = "us";
-        variant = "altgr-intl";
-        options = "caps:swapescape";
-      };
+    # Configure keymap for console
+    autoRepeatInterval = 30;
+    autoRepeatDelay = 200;
+    xkb = {
+      layout = "us";
+      variant = "altgr-intl";
+      options = "caps:swapescape";
+    };
   };
 
   console.useXkbConfig = true;
   users.defaultUserShell = pkgs.zsh;
   programs.zsh.enable = true; # full configuration in home manager
 
-    # # Fonts for powerline
-    # fonts.packages = with pkgs; [
-    #   powerline-fonts
-    # ];
+  hardware.enableAllFirmware = true;
 
-  environment.systemPackages = with pkgs; [
-  ] ++ (with pkgs-unstable; [
-  ]);
+  # For automounting?
+  services.devmon.enable = true;
+  services.gvfs.enable = true;
+  services.udisks2.enable = true;
 
-  # users.defaultUserShell = pkgs.zsh;
+  # SSH
+  services.openssh = {
+    enable = true;
+    settings = {
+      # Disable password login for safety
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+    };
+  };
+
+  # Natural scrolling should be on for touchpad devices
+  services.xserver.libinput.touchpad.naturalScrolling = true;
 
 }

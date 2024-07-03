@@ -2,48 +2,38 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ pkgs, pkgs-unstable, home-manager, ... }:
+{ ... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ../shared/configuration.nix
       # <home-manager/nixos>
     ];
 
   # Use the GRUB 2 boot loader.
   boot.loader.systemd-boot.enable = true;
-  # boot.loader.grub.efiSupport = true;
-  # boot.loader.grub.efiInstallAsRemovable = true;
-  # boot.loader.efi.efiSysMountPoint = "/boot/efi";
 
-  # Define on which hard drive you want to install Grub.
-  # boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
 
   networking.hostName = "ollenovo"; # Define your hostname.
-  # Pick only one of the below networking options.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # For automounting?
-  services.devmon.enable = true;
-  services.gvfs.enable = true;
-  services.udisks2.enable = true;
-
-  sound.enable = false;
-  hardware.pulseaudio.enable = false;
+  # Sound
   services.pipewire = {
     enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
   };
-  hardware.enableAllFirmware = true;
-  hardware.bluetooth.enable = true;
-  hardware.bluetooth.powerOnBoot = true;
+
+  # Bluetooth
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+  };
+  services.blueman.enable = true;
+
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.localadmin = {
@@ -51,13 +41,6 @@
     hashedPassword = "$y$j9T$vxTZItHj7fGHKhFgt.Ebw.$8CTxdlHFhoPd08VTiGxQ99GtPhGIxtvpcTHQ49epIgC";
     extraGroups = [ "wheel" "storage" "audio" ]; # Enable ‘sudo’ for the user.
   };
-
-  environment.systemPackages = with pkgs; [
-  ] ++ (with pkgs-unstable; [
-    eduvpn-client
-  ]);
-  # Keyring for eduvpn client
-  services.gnome.gnome-keyring.enable = true;
 
 
   # Some programs need SUID wrappers, can be configured further or are
