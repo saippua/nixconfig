@@ -193,7 +193,7 @@ in
     enable = true;
     settings = {
       font = {
-        size = 9;
+        size = opts.font_size or 13.0;
         normal = {
           family = "MesloLGS NF";
           style = "Regular";
