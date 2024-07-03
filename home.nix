@@ -58,7 +58,7 @@ in
             "${modifier}+j" = "focus down";
             "${modifier}+d" = "exec rofi -show drun";
             "${modifier}+s" = "exec rofi -show ssh";
-            "Mod4+l" = "exec ${pkgs.i3lock} --color=000000 -i ${pkgs.nixos-artwork.wallpapers.mosaic-blue.gnomeFilePath}";
+            "Mod4+l" = "exec ${pkgs.i3lock}/bin/i3lock --color=000000 -i ${pkgs.nixos-artwork.wallpapers.mosaic-blue.gnomeFilePath}";
             "Ctrl+Shift+Print" = "exec --no-startup-id maim --select | xclip -selection clipboard -t image/png";
             "Shift+Print" = "exec --no-startup-id maim --select \"${screenshot_file}\"";
             "Ctrl+Print" = "exec --no-startup-id maim | xclip -selection clipboard -t image/png";
