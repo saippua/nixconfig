@@ -23,6 +23,7 @@ in
     inherit pkgs unstable opts;
   };
 
+
   services.gnome-keyring.enable = opts.withVPN;
 
   fonts.fontconfig.enable = opts.withGUI;
@@ -57,8 +58,9 @@ in
             "${modifier}+k" = "focus up";
             "${modifier}+j" = "focus down";
             "${modifier}+d" = "exec rofi -show drun";
-            "${modifier}+s" = "exec rofi -show ssh";
-            "Mod4+l" = "exec ${pkgs.i3lock}/bin/i3lock --color=000000 -i ${pkgs.nixos-artwork.wallpapers.mosaic-blue.gnomeFilePath}";
+            "${modifier}+f" = "exec rofi -show ssh";
+            # "Mod4+l" = "exec bash /home/localadmin/nixconfig/lockmore/i3lockmore --image-fill ${pkgs.nixos-artwork.wallpapers.mosaic-blue.gnomeFilePath}";
+            "Mod4+l" = "exec dm-tool lock";
             "Ctrl+Shift+Print" = "exec --no-startup-id maim --select | xclip -selection clipboard -t image/png";
             "Shift+Print" = "exec --no-startup-id maim --select \"${screenshot_file}\"";
             "Ctrl+Print" = "exec --no-startup-id maim | xclip -selection clipboard -t image/png";
@@ -82,6 +84,31 @@ in
             { class = "Pavucontrol"; }
             { class = "feh"; }
           ];
+        };
+        startup = [
+        {
+          command =
+            "${pkgs.feh}/bin/feh --bg-fill ${pkgs.nixos-artwork.wallpapers.mosaic-blue.gnomeFilePath}";
+          always = true;
+          notification = false;
+        }
+        ];
+      };
+    };
+  };
+
+  programs.i3status = {
+    enable = true;
+    modules = {
+      "memory" = {
+        settings = {
+          format = "RAM %used of %available";
+          separator_block_width = 10;
+        };
+      };
+      "tztime local" = {
+        settings = {
+          format = "Week %V %Y-%m-%d %H:%M:%S";
         };
       };
     };
@@ -212,6 +239,13 @@ in
         # }
       ];
     };
+  };
+
+  # Enable dark mode for websites
+  gtk = {
+    enable = true;
+    gtk3.extraConfig.gtk-application-prefer-dark-theme = 1;
+    gtk4.extraConfig.gtk-application-prefer-dark-theme = 1;
   };
 
   home.stateVersion = "23.11";

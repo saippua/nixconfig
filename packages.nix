@@ -7,10 +7,16 @@ with pkgs; [
   ffmpeg
   lshw
   zip unzip
+  ripgrep
+
+  imagemagick
+  at
+  taskspooler
 
   # Monitoring
   htop
   nload
+
 
 ] ++ pkgs.lib.optionals opts.withGUI [
   # For screenshotting

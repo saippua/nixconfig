@@ -18,6 +18,7 @@
   networking.hostName = "WKS-95141-NLT"; # Define your hostname.
 
   networking.firewall.allowedUDPPorts = [ 10000 10001 ];
+  networking.firewall.allowedTCPPorts = [ 8080 ];
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.localadmin = {
@@ -25,6 +26,32 @@
     description = "Olli Koskelainen";
     extraGroups = [ "wheel" "storage" "audio" "networkmanager" ];
   };
+
+  nix.settings.substituters = [ "ssh-ng://localadmin@130.230.29.203" ];
+  nix.settings.trusted-public-keys = [ "teho-builder:3HITvp6JLhhLndHQdzIxUpoy5iAZZomIVCYcIx1AgmA=" ];
+
+
+# Distributed builds. Remember to setup cache keys for substituting!
+# https://nixos.wiki/wiki/Distributed_build
+  nix.distributedBuilds = true;
+  nix.buildMachines = [
+    {
+      hostName = "130.230.29.203";
+      system = "x86_64-linux";
+      protocol = "ssh-ng";
+      sshUser = "localadmin";
+      maxJobs = 1;
+      speedFactor = 2;
+      supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
+	    mandatoryFeatures = [ ];
+    }
+  ];
+  nix.extraOptions = ''
+    builders-use-substitutes = true
+  '';
+  # Used to disable local building for testing remote settings
+  # nix.settings.max-jobs = 0; 
+
 
   # Bluetooth
   hardware.bluetooth = {

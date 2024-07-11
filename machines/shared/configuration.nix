@@ -2,6 +2,7 @@
 {
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+  services.atd.enable = true;
   # Enable networking
   networking.networkmanager.enable = true;
 
@@ -22,13 +23,13 @@
 
   services.xserver = {
     enable = true;
-    desktopManager = {
-      xterm.enable = false;
-      wallpaper = {
-        combineScreens = true;
-        mode = "fill";
-      };
-    };
+    # desktopManager = {
+    #   xterm.enable = false;
+    #   wallpaper = {
+    #     combineScreens = true;
+    #     mode = "fill";
+    #   };
+    # };
 
     displayManager = {
       defaultSession = "none+i3";
