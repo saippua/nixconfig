@@ -7,7 +7,7 @@ with pkgs; [
   ffmpeg
   lshw
   zip unzip
-  ripgrep
+  ripgrep fd
 
   imagemagick
   at
@@ -16,6 +16,8 @@ with pkgs; [
   # Monitoring
   htop
   nload
+  
+  unstable.saippua-neovim
 
 
 ] ++ pkgs.lib.optionals opts.withGUI [

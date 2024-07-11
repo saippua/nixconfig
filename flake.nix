@@ -9,9 +9,10 @@
       url = "github:nix-community/home-manager/release-23.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nvim-flake.url = "github:saippua/nvim-flake";
   };
 
-  outputs = inputs @ { self, nixpkgs, nixpkgs-unstable, nix-matlab, home-manager, ... }:
+  outputs = inputs @ { self, nixpkgs, nixpkgs-unstable, nix-matlab, home-manager, nvim-flake, ... }:
 
     let
       system = "x86_64-linux";
@@ -32,7 +33,6 @@
           nix-matlab.overlay
         ];
       };
-
       unstable = import nixpkgs-unstable {
         inherit system;
         config = {
@@ -40,8 +40,10 @@
           allowUnfreePredicate = (_: true);
           nvidia.acceptLicense = true;
         };
+        overlays = [
+          nvim-flake.overlays.default
+        ];
       };
-
     in
     {
       nixosConfigurations = {
