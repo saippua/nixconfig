@@ -3,10 +3,10 @@
 
   inputs = {
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
     nix-matlab.url = "gitlab:doronbehar/nix-matlab";
     home-manager = {
-      url = "github:nix-community/home-manager/release-23.11";
+      url = "github:nix-community/home-manager/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nvim-flake.url = "github:saippua/nvim-flake";
@@ -105,6 +105,28 @@
             })
           ];
         };
+	wsl = nixpkgs.lib.nixosSystem {
+		inherit system pkgs;
+		specialArgs = {
+		inherit unstable;
+		};
+		modules = [
+			./machines/koti_wsl/configuration.nix
+			inputs.home-manager.nixosModules.home-manager
+			{
+				home-manager.extraSpecialArgs = {
+					inherit system pkgs unstable;
+					opts = {
+						withGUI = false;
+						withVPN = false;
+						withMatlab = false;
+						isOfficial = false;
+					};
+				};
+			home-manager.users.localadmin = import ./home.nix;
+			}
+		];
+	};
       };
     };
 }
