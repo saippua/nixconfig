@@ -12,6 +12,7 @@ with pkgs; [
   imagemagick
   at
   taskspooler
+  vlc
 
   # Monitoring
   htop
