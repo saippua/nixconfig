@@ -29,6 +29,8 @@
 
   nix.settings.substituters = [ "ssh-ng://localadmin@130.230.29.203" ];
   nix.settings.trusted-public-keys = [ "teho-builder:3HITvp6JLhhLndHQdzIxUpoy5iAZZomIVCYcIx1AgmA=" ];
+# Uncomment this if distributed builds stop working
+  # nix.settings.secret-key-files = "/home/localadmin/.ssh/cache-priv-key.pem";
 
 
 # Distributed builds. Remember to setup cache keys for substituting!
@@ -40,8 +42,8 @@
       system = "x86_64-linux";
       protocol = "ssh-ng";
       sshUser = "localadmin";
-      maxJobs = 1;
-      speedFactor = 2;
+      maxJobs = 6;
+      speedFactor = 100;
       supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
 	    mandatoryFeatures = [ ];
     }
