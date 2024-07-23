@@ -14,10 +14,18 @@
 
   # Use the GRUB 2 boot loader.
   boot.loader.systemd-boot.enable = true;
-
+  boot.kernelModules = [ "kvm-amd" "kvm-intel" ];
+  virtualisation = {
+    libvirtd.enable = true;
+    virtualbox.host.enable = true;
+    virtualbox.guest.enable = true;
+  };
 
   networking.hostName = "ollenovo"; # Define your hostname.
 
+  services.xrdp.enable = true;
+  services.xrdp.defaultWindowManager = "xfce4-session";
+  # services.xrdp.openFirewall = true;
 
   # Sound
   services.pipewire = {
@@ -39,9 +47,13 @@
   users.users.localadmin = {
     isNormalUser = true;
     hashedPassword = "$y$j9T$vxTZItHj7fGHKhFgt.Ebw.$8CTxdlHFhoPd08VTiGxQ99GtPhGIxtvpcTHQ49epIgC";
-    extraGroups = [ "wheel" "storage" "audio" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "storage" "audio" "dialout" "libvirtd" "qemu-libvirtd" ]; # Enable ‘sudo’ for the user.
   };
+  users.extraGroups.vboxusers.members = [ "localadmin" ];
 
+  services.udev.extraRules = ''
+    KERNEL=="ttyUSB0", MODE:="774"
+  '';
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
