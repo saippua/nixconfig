@@ -21,32 +21,18 @@
     LC_TIME = "fi_FI.UTF-8";
   };
 
+  services.displayManager.defaultSession = "none+i3";
+  services.libinput.touchpad = {
+    tapping = false; 
+    naturalScrolling = true;
+  };
+
   services.xserver = {
     enable = true;
-    # desktopManager = {
-    #   xterm.enable = false;
-    #   wallpaper = {
-    #     combineScreens = true;
-    #     mode = "fill";
-    #   };
-    # };
-
-    displayManager = {
-      defaultSession = "none+i3";
-    };
 
     windowManager.i3 = {
       enable = true;
     };
-    #   extraPackages = with pkgs; [
-    #     dmenu
-    #     i3status
-    #     i3lock
-    #     i3blocks
-    #   ];
-    # };
-
-    libinput.touchpad.tapping = false;
 
     # Configure keymap for console
     autoRepeatInterval = 30;
@@ -80,6 +66,5 @@
   };
 
   # Natural scrolling should be on for touchpad devices
-  services.xserver.libinput.touchpad.naturalScrolling = true;
 
 }
