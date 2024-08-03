@@ -201,7 +201,7 @@ in
       dev = "nix develop -c zsh";
       sourcezsh = "source ~/.zshrc";
       nixconfig = "git -C ~/nixconfig";
-      # nvim = "nix run /home/localadmin/nvim-flake";
+      nviml = "nix run /home/localadmin/nvim-flake";
     };
     history.ignoreDups = true;
     syntaxHighlighting.enable = true;
