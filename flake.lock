@@ -318,11 +318,11 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1721755071,
-        "narHash": "sha256-7v3OLgbsmy8gozL+I7y8GP978BTGQJd3/3JaC4kZffc=",
+        "lastModified": 1722712417,
+        "narHash": "sha256-7Elg8D4e3/mtyMo9WXpmShpp+iXV019t5u+Dvay/hE8=",
         "owner": "saippua",
         "repo": "nvim-flake",
-        "rev": "a8e94a08d9eb752a294d5f36eab3c8ff6dd5c115",
+        "rev": "a44bd169a7fda77d8d91f8864aaf7a683d61a38a",
         "type": "github"
       },
       "original": {
