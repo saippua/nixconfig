@@ -59,7 +59,6 @@ in
             "${modifier}+j" = "focus down";
             "${modifier}+d" = "exec rofi -show drun";
             "${modifier}+f" = "exec rofi -show ssh";
-            # "Mod4+l" = "exec bash /home/localadmin/nixconfig/lockmore/i3lockmore --image-fill ${pkgs.nixos-artwork.wallpapers.mosaic-blue.gnomeFilePath}";
             "Mod4+l" = "exec dm-tool lock";
             "Ctrl+Shift+Print" = "exec --no-startup-id maim --select | xclip -selection clipboard -t image/png";
             "Shift+Print" = "exec --no-startup-id maim --select \"${screenshot_file}\"";
@@ -193,15 +192,19 @@ in
     ];
     initExtra = ''
       setopt BASH_AUTO_LIST NO_MENU_COMPLETE NO_AUTO_MENU
-      source ~/nixconfig/config/.p10k.zsh
+      source ~/Nix/nixconfig/config/.p10k.zsh
+
+      # Alias for `nix run`. Function used instead so it can have an argument
+      run() {
+        nix run .#"$1"
+      }
     '';
-    # source ${./config/.p10k.zsh}
     shellAliases = {
       ll = "ls -la";
       dev = "nix develop -c zsh";
       sourcezsh = "source ~/.zshrc";
-      nixconfig = "git -C ~/nixconfig";
-      # nvim = "nix run /home/localadmin/nvim-flake";
+      nixconfig = "git -C ~/Nix/nixconfig";
+      nviml = "nix run ~/Nix/nvim-flake";
     };
     history.ignoreDups = true;
     syntaxHighlighting.enable = true;

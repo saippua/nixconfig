@@ -62,6 +62,7 @@
       # Disable password login for safety
       PasswordAuthentication = false;
       KbdInteractiveAuthentication = false;
+      X11Forwarding = true;
     };
   };
 
