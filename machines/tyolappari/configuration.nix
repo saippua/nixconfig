@@ -18,7 +18,7 @@
   networking.hostName = "WKS-95141-NLT"; # Define your hostname.
 
   networking.firewall.allowedUDPPorts = [ 10000 10001 ];
-  networking.firewall.allowedTCPPorts = [ 8080 50000 ];
+  networking.firewall.allowedTCPPorts = [ 8080 50000 50001 ];
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.localadmin = {
