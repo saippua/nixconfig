@@ -27,6 +27,7 @@ with pkgs; [
   xdotool
 
   pavucontrol
+  sxiv
 
   # Fonts
   # powerline-fonts
@@ -45,6 +46,7 @@ with pkgs; [
   teams-for-linux
   whatsapp-for-linux
   discord
+  slack
 ] ++ pkgs.lib.optionals opts.withMatlab [
   matlab
 ] ++ pkgs.lib.optionals opts.withVPN [
