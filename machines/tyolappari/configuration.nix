@@ -28,7 +28,7 @@
     extraGroups = [ "wheel" "storage" "audio" "networkmanager" ];
   };
 
-  # nix.settings.substituters = [ "ssh-ng://localadmin@130.230.29.24" ];
+  nix.settings.substituters = [ "ssh-ng://localadmin@130.230.29.24" ];
   nix.settings.trusted-public-keys = [ "teho-builder:3HITvp6JLhhLndHQdzIxUpoy5iAZZomIVCYcIx1AgmA=" ];
   # Uncomment this if distributed builds stop working
   # nix.settings.secret-key-files = "/home/localadmin/.ssh/cache-priv-key.pem";
