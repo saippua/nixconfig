@@ -7,7 +7,6 @@ let
 in
 {
 
-
   home.username = "localadmin";
   home.homeDirectory = "/home/localadmin";
 
@@ -223,6 +222,17 @@ in
         };
       };
       keyboard.bindings = [
+        # Fix shift-enter and ctrl-enter keycodes so they can be used as hotkeys
+        {
+          chars = "\u001B[13;2u";
+          key = "Return";
+          mods = "Shift";
+        }
+        {
+          chars = "\u001B[13;5u";
+          key = "Return";
+          mods = "Control";
+        }
         # {
         #     key = "Tab";
         #     mods = "Control";
