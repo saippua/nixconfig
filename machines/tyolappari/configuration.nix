@@ -6,7 +6,8 @@
 
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
+      # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../shared/configuration.nix
     ];
@@ -27,25 +28,25 @@
     extraGroups = [ "wheel" "storage" "audio" "networkmanager" ];
   };
 
-  nix.settings.substituters = [ "ssh-ng://localadmin@130.230.29.203" ];
+  # nix.settings.substituters = [ "ssh-ng://localadmin@130.230.29.24" ];
   nix.settings.trusted-public-keys = [ "teho-builder:3HITvp6JLhhLndHQdzIxUpoy5iAZZomIVCYcIx1AgmA=" ];
-# Uncomment this if distributed builds stop working
+  # Uncomment this if distributed builds stop working
   # nix.settings.secret-key-files = "/home/localadmin/.ssh/cache-priv-key.pem";
 
 
-# Distributed builds. Remember to setup cache keys for substituting!
-# https://nixos.wiki/wiki/Distributed_build
+  # Distributed builds. Remember to setup cache keys for substituting!
+  # https://nixos.wiki/wiki/Distributed_build
   nix.distributedBuilds = true;
   nix.buildMachines = [
     {
-      hostName = "130.230.29.203";
+      hostName = "130.230.29.24";
       system = "x86_64-linux";
       protocol = "ssh-ng";
       sshUser = "localadmin";
       maxJobs = 6;
       speedFactor = 100;
       supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
-	    mandatoryFeatures = [ ];
+      mandatoryFeatures = [ ];
     }
   ];
   nix.extraOptions = ''
@@ -80,13 +81,13 @@
     package = config.boot.kernelPackages.nvidiaPackages.stable;
 
     prime = {
-        # sync.enable = true;
-        intelBusId = "PCI:0:2:0";
-        nvidiaBusId = "PCI:60:0:0";
+      # sync.enable = true;
+      intelBusId = "PCI:0:2:0";
+      nvidiaBusId = "PCI:60:0:0";
     };
 
   };
-  services.xserver.videoDrivers = ["intel" "nvidia"];
+  services.xserver.videoDrivers = [ "intel" "nvidia" ];
 
 
   # This value determines the NixOS release from which the default
