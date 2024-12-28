@@ -68,69 +68,69 @@
             }
           ];
         };
-        tyo = nixpkgs.lib.nixosSystem {
+        wsl = nixpkgs.lib.nixosSystem {
           inherit system pkgs;
           specialArgs = {
-            inherit unstable;
+          inherit unstable;
           };
           modules = [
-            ./machines/tyolappari/configuration.nix
-
+            ./machines/koti_wsl/configuration.nix
             inputs.home-manager.nixosModules.home-manager
             {
               home-manager.extraSpecialArgs = {
                 inherit system pkgs unstable;
                 opts = {
-                  withGUI = true;
-                  withVPN = true;
-                  withMatlab = true;
-                  isOfficial = true;
+                  withGUI = false;
+                  withVPN = false;
+                  withMatlab = false;
+                  isOfficial = false;
                 };
               };
-              home-manager.users.localadmin = import ./home.nix;
+            home-manager.users.localadmin = import ./home.nix;
             }
           ];
         };
-        teho = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          nix = {
-            package = pkgs.nix;
-            settings.experimental-features = [ "nix-command" "flakes" ];
-          };
-          modules = [
-            (import ./home.nix {
-              inherit system pkgs unstable;
-              opts = {
-                withGUI = true;
-                withVPN = false;
-                withMatlab = false;
-                isOfficial = true;
-              };
-            })
-          ];
-        };
-	wsl = nixpkgs.lib.nixosSystem {
-		inherit system pkgs;
-		specialArgs = {
-		inherit unstable;
-		};
-		modules = [
-			./machines/koti_wsl/configuration.nix
-			inputs.home-manager.nixosModules.home-manager
-			{
-				home-manager.extraSpecialArgs = {
-					inherit system pkgs unstable;
-					opts = {
-						withGUI = false;
-						withVPN = false;
-						withMatlab = false;
-						isOfficial = false;
-					};
-				};
-			home-manager.users.localadmin = import ./home.nix;
-			}
-		];
-	};
+        # tyo = nixpkgs.lib.nixosSystem {
+        #   inherit system pkgs;
+        #   specialArgs = {
+        #     inherit unstable;
+        #   };
+        #   modules = [
+        #     ./machines/tyolappari/configuration.nix
+        #
+        #     inputs.home-manager.nixosModules.home-manager
+        #     {
+        #       home-manager.extraSpecialArgs = {
+        #         inherit system pkgs unstable;
+        #         opts = {
+        #           withGUI = true;
+        #           withVPN = true;
+        #           withMatlab = true;
+        #           isOfficial = true;
+        #         };
+        #       };
+        #       home-manager.users.localadmin = import ./home/main.nix;
+        #     }
+        #   ];
+        # };
+        # teho = home-manager.lib.homeManagerConfiguration {
+        #   inherit pkgs;
+        #   nix = {
+        #     package = pkgs.nix;
+        #     settings.experimental-features = [ "nix-command" "flakes" ];
+        #   };
+        #   modules = [
+        #     (import ./home.nix {
+        #       inherit system pkgs unstable;
+        #       opts = {
+        #         withGUI = true;
+        #         withVPN = false;
+        #         withMatlab = false;
+        #         isOfficial = true;
+        #       };
+        #     })
+        #   ];
+        # };
       };
     };
 }

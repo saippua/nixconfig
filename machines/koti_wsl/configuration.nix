@@ -11,14 +11,40 @@
   imports = [
     # include NixOS-WSL modules
     <nixos-wsl/modules>
-    ../shared/configuration.nix
+    # ../shared/configuration.nix
   ];
+
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   wsl.enable = true;
   wsl.defaultUser = "localadmin";
+
+  time.timeZone = "Europe/Helsinki";
+  i18n.defaultLocale = "en_US.UTF-8";
+
+  i18n.extraLocaleSettings = {
+    LC_ADDRESS = "fi_FI.UTF-8";
+    LC_IDENTIFICATION = "fi_FI.UTF-8";
+    LC_MEASUREMENT = "fi_FI.UTF-8";
+    LC_MONETARY = "fi_FI.UTF-8";
+    LC_NAME = "fi_FI.UTF-8";
+    LC_NUMERIC = "fi_FI.UTF-8";
+    LC_PAPER = "fi_FI.UTF-8";
+    LC_TELEPHONE = "fi_FI.UTF-8";
+    LC_TIME = "fi_FI.UTF-8";
+  };
   
   programs.zsh.enable = true; # full configuration in home manager
   users.defaultUserShell = pkgs.zsh;
+  users.users.localadmin = {
+    isNormalUser = true;
+    description = "Olli Koskelainen";
+    extraGroups = [ "wheel" "storage" "audio" "networkmanager" "dialout" ];
+  };
+
+  services.udev.extraRules = ''
+    KERNEL=="ttyUSB0", MODE:="774"
+  '';
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

@@ -95,6 +95,12 @@ in
     };
   };
 
+  programs.direnv = {
+    enable = true;
+    enableZshIntegration = true;
+    nix-direnv.enable = true;
+  };
+
   programs.i3status = {
     enable = true;
     modules = {
@@ -246,7 +252,7 @@ in
   };
 
   # Enable dark mode for websites
-  gtk = {
+  gtk = mkIf opts.withGUI {
     enable = true;
     gtk3.extraConfig.gtk-application-prefer-dark-theme = 1;
     gtk4.extraConfig.gtk-application-prefer-dark-theme = 1;
