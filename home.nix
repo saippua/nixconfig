@@ -24,6 +24,7 @@ in
 
 
   services.gnome-keyring.enable = opts.withVPN;
+  services.ssh-agent.enable = true;
 
   fonts.fontconfig.enable = opts.withGUI;
 
@@ -210,6 +211,7 @@ in
       sourcezsh = "source ~/.zshrc";
       nixconfig = "git -C ~/Nix/nixconfig";
       nviml = "nix run ~/Nix/nvim-flake";
+      pythond = "python -m pdb -c continue";
     };
     history.ignoreDups = true;
     syntaxHighlighting.enable = true;
